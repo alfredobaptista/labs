@@ -25,6 +25,6 @@
             android:name=".DisplayMessageActivity"
             android:parentActivityName=".MainActivity">
         </activity>
-    </application>
 
+    </application>
 </manifest>

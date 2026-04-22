@@ -8,7 +8,7 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.appcompat.app.AppCompatActivity
 
-// Constante para a chave da mensagem (equivalente ao static final em Java)
+
 const val EXTRA_MESSAGE = "ao.uan.fc.dam.MESSAGE"
 
 class MainActivity : AppCompatActivity() {
@@ -29,9 +29,10 @@ class MainActivity : AppCompatActivity() {
             }
             startActivity(intent)
         }
+        Log.d("MainActivity", "Minha primeira mensagem de depuração.")
     }
 
-    /** Chamado quando o usuário clica no botão Send */
+    /** Chamado quando o utilizador clica no botão Send */
     fun sendMessage(view: View) {
         val editText = findViewById<EditText>(R.id.editTextMessage)
         val message = editText.text.toString()
