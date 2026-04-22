@@ -66,4 +66,4 @@ Repositório oficial dos projetos e exercícios práticos da disciplina **Desenv
 
 1. Clone o repositório:
    ```bash
-   git clone https://github.com/seu-usuario/dam-laboratorios.git
+   git clone https://github.com/alfredobaptista/labs.git
