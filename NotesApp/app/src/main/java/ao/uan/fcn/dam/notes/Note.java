@@ -2,18 +2,13 @@ package ao.uan.fcn.dam.notes;
 
 public class Note {
     private String title;
-    private String content;
+    private String text;
 
-    public Note(String title, String content) {
+    public Note(String title, String text) {
         this.title = title;
-        this.content = content;
+        this.text = text;
     }
 
-    public String getTitle() {
-        return title;
-    }
-
-    public String getContent() {
-        return content;
-    }
+    public String getTitle() { return title; }
+    public String getText() { return text; }
 }

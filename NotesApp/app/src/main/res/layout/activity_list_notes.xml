@@ -1,34 +1,16 @@
-<?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.microsoft.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
-
-    <TextView
-        android:id="@+id/txtHeader"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="ListNotesActivity"
-        android:textSize="18sp"
-        android:textStyle="bold"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="16dp" />
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent" android:padding="16dp">
 
     <ListView
-        android:id="@+id/listViewNotes"
+        android:id="@+id/listNotes"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@id/txtHeader"
-        android:layout_above="@id/btnNewNote"
-        android:layout_marginBottom="16dp" />
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <Button
         android:id="@+id/btnNewNote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:text="New Note"
-        android:backgroundTint="#2196F3"
-        android:textColor="#FFFFFF" />
-
-</RelativeLayout>
+        android:text="New Note"/>
+</LinearLayout>

@@ -1,55 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.microsoft.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CreateNote Activity"
-        android:textStyle="bold"
-        android:layout_gravity="center"
-        android:layout_marginBottom="20dp" />
+<!-- activity_create_note.xml -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:padding="16dp"
+    android:layout_width="match_parent" android:layout_height="match_parent">
 
     <EditText
-        android:id="@+id/editNoteTitle"
+        android:id="@+id/edtTitle"
+        android:hint="Note Title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Note title"
-        android:inputType="text"
-        android:layout_marginBottom="10dp" />
+        android:layout_height="wrap_content"/>
 
     <EditText
-        android:id="@+id/editNoteText"
+        android:id="@+id/edtText"
+        android:hint="Note Text"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:hint="Note text"
-        android:gravity="top"
-        android:inputType="textMultiLine" />
+        android:layout_height="wrap_content"
+        android:lines="5"
+        android:gravity="top"/>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="16dp">
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
         <Button
             android:id="@+id/btnOk"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="OK"
-            android:layout_marginEnd="8dp" />
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
 
         <Button
             android:id="@+id/btnCancel"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:text="Cancel"
-            android:backgroundTint="#FF5252" />
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 </LinearLayout>
