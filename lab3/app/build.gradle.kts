@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "ao.uan.fc.dam.lab3"
+    namespace = "ao.fcn.uan.dam.lab3"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
@@ -11,7 +11,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "ao.uan.fc.dam.lab3"
+        applicationId = "ao.fcn.uan.dam.lab3"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
@@ -36,12 +36,11 @@ android {
 }
 
 dependencies {
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
+    implementation(libs.appcompat)
     implementation(libs.material)
-    implementation(libs.androidx.activity)
-    implementation(libs.androidx.constraintlayout)
+    implementation(libs.activity)
+    implementation(libs.constraintlayout)
     testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 }
