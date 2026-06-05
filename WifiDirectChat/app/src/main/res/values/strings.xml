@@ -1,0 +1,11 @@
+<resources>
+    <string name="port">10001</string>
+    <string name="app_name">MsgSenderNative</string>
+    <string name="sendButton">Send</string>
+    <string name="connectButton">Connect</string>
+    <string name="disconnectButton">Disconnect</string>
+    <string name="serviceButton">WiFi On</string>
+    <string name="cancelButton">WiFi Off</string>
+    <string name="inRangeButton">In Range</string>
+    <string name="inGroupButton">In Network</string>
+</resources>

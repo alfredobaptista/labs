@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!-- PERMISSÕES WiFi Direct (obrigatórias) -->
+
+    <!-- Acesso à internet (base Android networking) -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- Estado do WiFi -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+
+    <!-- Alterar estado do WiFi (descoberta peers) -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+
+    <!-- Necessário para descobrir dispositivos WiFi Direct -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <!-- IMPORTANTE: necessário para scan WiFi Direct (Android <= 12) -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <!-- Suporte adicional de localização (compatibilidade antiga) -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+
+    <!-- 🔵 Android 13+ (WiFi Nearby permission moderna) -->
+    <uses-permission
+        android:name="android.permission.NEARBY_WIFI_DEVICES"
+        android:usesPermissionFlags="neverForLocation" />
+
+    <application
+        android:allowBackup="true"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Material3.DayNight.NoActionBar">
+
+        <!-- 📱 Activity principal do Peer Scanner -->
+        <activity
+            android:name=".PeerScannerActivity"
+            android:exported="true">
+
+            <!-- 🚀 Entry point da app -->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+    </application>
+
+</manifest>
