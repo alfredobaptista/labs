@@ -3,6 +3,7 @@ package ao.uan.fcn.wifidirect;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.net.wifi.p2p.WifiP2pDevice;
 import android.net.wifi.p2p.WifiP2pInfo;
@@ -15,8 +16,11 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 public class DeviceDetailFragment extends Fragment implements WifiP2pManager.ConnectionInfoListener {
@@ -27,8 +31,8 @@ public class DeviceDetailFragment extends Fragment implements WifiP2pManager.Con
     private WifiP2pInfo info;
     private ProgressDialog progressDialog;
     private DeviceActionListener listener;
+    private ActivityResultLauncher<String[]> filePermissionLauncher;
 
-    // Interface que a Activity deve implementar
     public interface DeviceActionListener {
         void connect(WifiP2pDevice device);
         void disconnect();
@@ -44,6 +48,21 @@ public class DeviceDetailFragment extends Fragment implements WifiP2pManager.Con
         }
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        filePermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestMultiplePermissions(),
+                permissions -> {
+                    boolean allGranted = permissions.values().stream().allMatch(granted -> granted);
+                    if (allGranted) {
+                        openFilePicker();
+                    } else {
+                        Toast.makeText(getActivity(), "Storage permission needed to send files", Toast.LENGTH_SHORT).show();
+                    }
+                });
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -54,25 +73,34 @@ public class DeviceDetailFragment extends Fragment implements WifiP2pManager.Con
         Button btnSendFile = contentView.findViewById(R.id.btn_send_file);
 
         btnConnect.setOnClickListener(v -> {
-            if (listener != null && device != null) {
-                listener.connect(device);
-            }
+            if (listener != null && device != null) listener.connect(device);
         });
-
         btnDisconnect.setOnClickListener(v -> {
-            if (listener != null) {
-                listener.disconnect();
-            }
+            if (listener != null) listener.disconnect();
         });
-
-        btnSendFile.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
-            intent.addCategory(Intent.CATEGORY_OPENABLE);
-            intent.setType("*/*");
-            startActivityForResult(intent, CHOOSE_FILE_REQUEST);
-        });
+        btnSendFile.setOnClickListener(v -> checkStoragePermissionAndPickFile());
 
         return contentView;
+    }
+
+    private void checkStoragePermissionAndPickFile() {
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.TIRAMISU) {
+            openFilePicker();
+        } else {
+            String perm = android.Manifest.permission.READ_EXTERNAL_STORAGE;
+            if (ContextCompat.checkSelfPermission(requireContext(), perm) == PackageManager.PERMISSION_GRANTED) {
+                openFilePicker();
+            } else {
+                filePermissionLauncher.launch(new String[]{perm});
+            }
+        }
+    }
+
+    private void openFilePicker() {
+        Intent intent = new Intent(Intent.ACTION_OPEN_DOCUMENT);
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType("*/*");
+        startActivityForResult(intent, CHOOSE_FILE_REQUEST);
     }
 
     public void showDetails(WifiP2pDevice device) {
@@ -102,13 +130,11 @@ public class DeviceDetailFragment extends Fragment implements WifiP2pManager.Con
         ((TextView) contentView.findViewById(R.id.status_text)).setText("Group Owner IP: " + info.groupOwnerAddress.getHostAddress());
 
         if (info.groupFormed && info.isGroupOwner) {
-            // Inicia o servidor UDP para receber ficheiros (Selective Repeat)
             Intent receiveIntent = new Intent(getActivity(), FileTransferService.class);
             receiveIntent.setAction(FileTransferService.ACTION_RECEIVE_FILE);
             getActivity().startService(receiveIntent);
             ((TextView) contentView.findViewById(R.id.status_text)).setText("UDP Server ready. Waiting for file...");
         } else if (info.groupFormed) {
-            // Cliente: exibe botão para enviar ficheiro
             contentView.findViewById(R.id.btn_send_file).setVisibility(View.VISIBLE);
             ((TextView) contentView.findViewById(R.id.status_text)).setText("Client ready. Select a file to send.");
         }
@@ -120,10 +146,15 @@ public class DeviceDetailFragment extends Fragment implements WifiP2pManager.Con
         if (requestCode == CHOOSE_FILE_REQUEST && resultCode == getActivity().RESULT_OK && data != null) {
             Uri fileUri = data.getData();
             if (fileUri != null) {
+                String goIp = info.groupOwnerAddress.getHostAddress();
+                if (goIp == null) {
+                    Toast.makeText(getActivity(), "Group Owner IP not available", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 Intent serviceIntent = new Intent(getActivity(), FileTransferService.class);
                 serviceIntent.setAction(FileTransferService.ACTION_SEND_FILE);
                 serviceIntent.putExtra(FileTransferService.EXTRAS_FILE_PATH, fileUri.toString());
-                serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS, info.groupOwnerAddress.getHostAddress());
+                serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_ADDRESS, goIp);
                 serviceIntent.putExtra(FileTransferService.EXTRAS_GROUP_OWNER_PORT, FileTransferService.UDP_PORT);
                 getActivity().startService(serviceIntent);
                 ((TextView) contentView.findViewById(R.id.status_text)).setText("Sending file...");

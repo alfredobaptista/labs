@@ -7,7 +7,7 @@ public class Segment {
     public static final int FLAG_ACK  = 0x02;
     public static final int FLAG_FIN  = 0x04;
 
-    public static final int HEADER_SIZE = 9;  // ALTERADO: agora é public
+    public static final int HEADER_SIZE = 9;
 
     public short seqNum;
     public short ackNum;
